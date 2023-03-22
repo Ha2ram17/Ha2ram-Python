@@ -1,0 +1,73 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMf9usMLpYHbfaByR4R9h1v",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Ha2ram17/11224-Ha2ram/blob/main/while%EB%AC%B8%EC%9D%84%20%EC%9D%B4%EC%9A%A9%ED%95%9C%203%EC%9D%98%20%EB%B0%B0%EC%88%98%20%ED%8C%90%EB%B3%84%EA%B8%B0%2C%20%EC%9D%8C%EC%88%98%20%EC%9E%85%EB%A0%A5%20%EC%8B%9C%20%EC%A0%95%EC%A7%80\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 4,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4bftZ5ZP49jc",
+        "outputId": "4bde2b28-f799-4845-d39d-c9f71c6e19c5"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "3의 배수를 입력해주세요 : 3\n",
+            "ok\n",
+            "3의 배수를 입력해주세요 : 0\n",
+            "stop\n"
+          ]
+        }
+      ],
+      "source": [
+        "while(True):\n",
+        " num = int(input(\"3의 배수를 입력해주세요 : \"))\n",
+        " if num <= 0 :\n",
+        "  print(\"stop\")\n",
+        "  break\n",
+        " if num%3 == 0:\n",
+        "  print(\"ok\")\n",
+        " else:\n",
+        "  print(\"no\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "NhHz7-jYf0ZI"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
