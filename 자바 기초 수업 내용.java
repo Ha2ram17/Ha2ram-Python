@@ -11,9 +11,9 @@ public class Chr {
 		System.out.println("");
 		System.out.println(3+5);
 		System.out.println("3+5");
-		System.out.print("3+5 = ");
-		System.out.print(3+5);
-		
+		System.out.print("3+5 = "); //print에 ln을 붙히지 않음으로써 결과론적으로 아랫 문장과 합쳐져서 3+5 = 8이 나옴.
+		System.out.println(3+5);
+		System.out.println("3+5 = "+(3+5));
 	}
 
 }
