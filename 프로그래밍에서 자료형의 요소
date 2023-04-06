@@ -1,0 +1,5 @@
+int : 정수형
+long : 긴 정수형 
+string : 문자형
+double : 긴 실수형
+float : 실수형
