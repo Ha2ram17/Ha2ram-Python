@@ -1,0 +1,246 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from queue import Queue
+import random
+
+def 주식게임():
+    stock_record = []
+    bot_record = []
+    turn = 0
+    턴수 = int(input('턴 수 : '))
+    시작주가 = int(input('시작 주가 : '))
+    시드머니 = int(input('봇 시드머니 : '))
+    stock = 시작주가
+    bot_money = 시드머니
+    bot_stock = 0
+    bot_buy = 0
+    bot_short = 0
+
+    for _ in range(턴수):
+        print('')
+        print('---------------------------')
+        turn += 1
+        up_down_range = np.random.rand()
+        if up_down_range < 0.2:
+            stock_up_down = np.random.randint(-30000, -6999)
+        elif 0.2 <= up_down_range <= 0.78:
+            stock_up_down = np.random.randint(-7000, 7001)
+        elif 0.78 < up_down_range <= 0.79:
+            stock_up_down = np.random.randint(int(stock * 0.2), int(stock * 0.4))
+        elif 0.79 < up_down_range <= 0.8 and stock >= 120000:
+            stock_up_down = np.random.randint(int(-stock * 0.4), int(-stock * 0.1))
+        else:
+            stock_up_down = np.random.randint(7001, 30001)
+
+        if stock + stock_up_down <= 0:
+            stock_up_down = abs(stock_up_down)
+        stock = max(1, stock + stock_up_down)
+        stock_record.append(stock)
+
+        plt.plot(stock_record)
+        plt.xlabel('turn')
+        plt.ylabel('stock')
+        plt.show()
+
+        print('')
+        print(f'턴 {turn}')
+        print(f'주가 변동: {stock_up_down}원')
+        print(f'현재 주가: {stock}원')
+        print(f'봇 보유 금액: {bot_money}원')
+        print(f'봇 보유 주식: {bot_stock}주')
+        print('')
+
+        if bot_stock > 0 and bot_buy < stock and np.random.rand() > 0.3:
+            bot_amount = np.random.randint(1, bot_stock + 1)
+            bot_money += bot_amount * stock
+            bot_stock -= bot_amount
+            bot_record.append(-bot_amount)
+            print(f'봇이 {bot_amount}주 매도하였습니다.')
+        elif stock > 70000 and bot_buy < stock and np.random.rand() > 0.7:
+            bot_amount = np.random.randint(1, 21 + bot_stock)
+            bot_money += bot_amount * stock
+            bot_stock -= bot_amount
+            bot_record.append(-bot_amount)
+            bot_short = stock
+            print(f'봇이 {bot_amount}주 공매도하였습니다.')
+        elif bot_short > stock and bot_stock < 0:
+            bot_amount = np.random.randint(abs(bot_stock), abs(bot_stock) + 5)
+            bot_money -= bot_amount * stock
+            bot_stock += bot_amount
+            bot_buy = stock
+            bot_short = 0
+            bot_record.append(bot_amount)
+            print(f'봇이 {bot_amount}주 매수하였습니다.')
+        elif bot_buy * 0.5 < stock and bot_money // stock > 1:
+            bot_amount = np.random.randint(1, (bot_money // stock) + 1)
+            bot_money -= bot_amount * stock
+            bot_stock += bot_amount
+            bot_buy = stock
+            bot_record.append(bot_amount)
+            print(f'봇이 {bot_amount}주 매수하였습니다.')
+        elif np.random.rand() > 0.5 and bot_money // stock > 1:
+            bot_amount = np.random.randint(1, (bot_money // stock) + 1)
+            bot_money -= bot_amount * stock
+            bot_stock += bot_amount
+            bot_buy = stock
+            bot_record.append(bot_amount)
+            print(f'봇이 {bot_amount}주 매수하였습니다.')
+        else:
+            bot_record.append(0)
+
+    final_stock = max(1, stock_record[-1] + np.random.randint(-50000, 50001))
+    stock_record.append(final_stock)
+    bot_result = bot_money + bot_stock * final_stock
+
+    if bot_stock != 0:
+        bot_record.append(-bot_stock)
+    else:
+        bot_record.append(0)
+
+    print('---------------------------------')
+    print(f'주가 변동 내역: {stock_record}')
+    print(f'시작 주가: {시작주가}원')
+    print(f'최종 주가: {stock_record[-1]}원')
+    print('')
+    print(f'봇 시드머니: {시드머니}원')
+    print(f'봇 최종 보유 금액: {bot_result}원')
+    print(f'봇 거래 내역: {bot_record}')
+    print(f'수익률: {round((bot_result - 시드머니) / 시드머니 * 100.0, 2)}%')
+
+def 카드게임():
+    # 카드의 값
+    values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
+    # 카드의 종류
+    suits = ["♠", "♥", "♣", "♦"]
+
+    # 카드를 섞는다.
+    cards = []
+    for suit in suits:
+        for value in values:
+            cards.append((suit, value))
+    random.shuffle(cards)
+
+    # 플레이어의 수를 입력받는다.
+    players_count = int(input("플레이어의 수를 입력하세요: "))
+
+    # 플레이어를 생성한다.
+    players = []
+    for i in range(players_count):
+        players.append({
+            "name": input(f"플레이어 {i + 1}의 이름을 입력하세요: "),
+            "cards": []
+        })
+
+    # 각 플레이어에게 5장의 카드를 나누어 준다.
+    for i in range(players_count):
+        for j in range(5):
+            players[i]["cards"].append(cards.pop())
+
+    # 게임을 시작한다.
+    turn = 0
+    while len(cards) > 0:
+        # 현재 플레이어의 카드를 출력한다.
+        print(f"현재 플레이어: {players[turn]['name']} / 카드: {players[turn]['cards']}")
+
+        # 현재 플레이어의 카드 중 가장 높은 카드를 찾는다.
+        highest_card = max(players[turn]["cards"], key=lambda x: x[1])
+
+        # 현재 플레이어의 카드 중 가장 높은 카드를 출력한다.
+        print(f"현재 플레이어의 가장 높은 카드: {highest_card}")
+
+        # 현재 플레이어의 가장 높은 카드를 제거한다.
+        players[turn]["cards"].remove(highest_card)
+
+        # 다음 플레이어로 넘어간다.
+        turn = (turn + 1) % players_count
+
+        # 다음 플레이어가 카드를 내지 못하는 경우, 덱에서 카드를 한 장 뽑는다.
+        if len(players[turn]["cards"]) == 0 and len(cards) > 0:
+            players[turn]["cards"].append(cards.pop())
+
+    # 게임이 끝난다.
+    winner = players[turn]["name"]
+    print(f"게임의 승자는 {winner}입니다!")
+
+def generate_secret_number():
+  """
+  3자리 숫자를 생성합니다.
+
+  Returns:
+    3자리 숫자
+  """
+  numbers = [i for i in range(10)]
+  random.shuffle(numbers)
+  return str(numbers[0]) + str(numbers[1]) + str(numbers[2])
+
+def get_guess():
+  """
+  사용자의 추측을 받습니다.
+
+  Returns:
+    사용자의 추측
+  """
+  while True:
+    print("숫자를 입력하세요. (예: 123)")
+    guess = input()
+    if len(guess) == 3 and all(c.isdigit() for c in guess):
+      return guess
+
+def count_strikes_and_balls(secret_number, guess):
+  """
+  비밀번호와 추측번호를 비교하여 스트라이크와 볼의 수를 계산합니다.
+
+  Args:
+    secret_number: 비밀번호
+    guess: 추측번호
+
+  Returns:
+    스트라이크 수, 볼 수
+  """
+  strikes = 0
+  balls = 0
+  for i in range(3):
+    if secret_number[i] == guess[i]:
+      strikes += 1
+    elif guess[i] in secret_number:
+      balls += 1
+  return strikes, balls
+
+def main():
+  secret_number = generate_secret_number()
+  guesses = 0
+  while True:
+    guess = get_guess()
+    strikes, balls = count_strikes_and_balls(secret_number, guess)
+    guesses += 1
+    print("스트라이크: {} 볼: {}".format(strikes, balls))
+    if strikes == 3:
+      print("축하합니다! {}번 만에 맞추셨습니다.".format(guesses))
+      break
+print()
+print("게임장에 오신 것을 환영합니다.")
+def main():
+    while True:
+        print("게임을 선택하세요:")
+        print("1. 주식 게임")
+        print("2. 카드 게임")
+        print("3. 숫자 맞추기 게임")
+        print("0. 종료")
+
+        select1 = input("선택: ")
+
+        if select1 == "1":
+            주식게임()
+        elif select1 == "2":
+            카드게임()
+        elif select1 == "3":
+            숫자맞추기게임()
+        elif select1 == "0":
+            print("게임을 종료합니다.")
+            break
+        else:
+            print("잘못된 입력입니다. 다시 시도하세요.")
+
+if __name__ == "__main__":
+    main()
